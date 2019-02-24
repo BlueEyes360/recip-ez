@@ -25,11 +25,10 @@ class UI extends Component {
     state = {
         dataMicro: 0,
         dataGoogle: 0,
-        error: 0,
         count: 0,
-        loading: true,
         showForm: false,
-        showRecipes: false
+        showRecipes: false,
+        ingredientList: []
     }
 
     doVisionAPICall = () => {
@@ -179,7 +178,6 @@ class UI extends Component {
         this.doVisionAPICall();
     }
 
-
     toggleShowIngredients = () => {
         let truth = !this.state.showForm;
         this.setState({showForm: truth});
@@ -190,20 +188,20 @@ class UI extends Component {
         this.setState({showRecipes: truth});
     }
 
+    myCallBackFromForm = (dataFromChild) => {
+        this.setState({ingredientList: dataFromChild});
+    }
+
     render() {
         const { isLoading } = this.state;
 
         let ingredForm = null;
 
         if(this.state.showForm === true){
-            ingredForm = <IngredientForm />;
+            ingredForm = <IngredientForm callbackFromParent={this.myCallBackFromForm} />;
         }
 
         let display = null;
-
-        if(this.state.showForm === true){
-            ingredForm = <IngredientForm />;
-        }
 
         if(this.state.showRecipes === true){
             display = (
@@ -224,8 +222,6 @@ class UI extends Component {
                 </div>
             )
         }
-
-        var testIngredients = ['carrot', 'egg'];
 
         return(
             <Container className="fluid">

@@ -159,8 +159,6 @@ class Auth extends Component {
         this.setState({controls: updatedAuthForm, formIsValid: formIsValid});
     }
 
-
-
     submitHandler = () => {
         for(let key in this.state.controls)
         {
@@ -173,7 +171,9 @@ class Auth extends Component {
                 newIngArray.push(nextIngredient);
 
                 this.setState({ingredientsArray: newIngArray});
+                this.props.callbackFromParent(newIngArray);
             }
+
         }
     }
 
