@@ -1,26 +1,86 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+import './recipeCard.css';
 import Card from 'react-bootstrap/Card';
-import chili from './Assets/chiliConCarne.jpg';
+import React, { Component } from 'react';
+import Button from 'react-bootstrap/Button';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+//import DisplayRecip from './DisplayRecipe/DisplayRecip.js';
 
-const displayCard  = (props) => {
-    return (
-        <div>
+class displayScreen extends Component {
+    state = {
+        // card: true,
+        homeCard: true,
+    }
+    
+    // clickHandler = () => {
+    //     let oldCardValue = this.state.card;
+    //     this.setState({card: !oldCardValue});
+    // }
 
-<Card style={{ width: '18rem' }}>
-<Card.Img variant="top" src={chili} />
-    <Card.Body>
-        <Card.Title>{props.title}</Card.Title>
-        <Card.Text>
-            {props.mealDisc}
-        </Card.Text>
-    </Card.Body>
-</Card>
-        {/* props.title
-        props.descrisption
-        props.pic maybe?*/}
-        </div>
-    )
+    clickHome = () => {
+        let oldHomeValue = this.state.homeCard;
+        this.setState({homeCard: !oldHomeValue});
+    }
+    
+    render() {
+
+        let display = (
+            <div>
+                <Card className="recipeCard">
+                <Card.Img src={this.props.picture} Transformation width="250" height="250" gravity="faces" crop="fill" />
+                    <Card.Body>
+                        <Card.Title>{this.props.title}</Card.Title>
+                        <Card.Text>
+                            {this.props.ingredients}
+                        </Card.Text>
+                        
+                        <Button onClick={() => this.clickHome()}>Home</Button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        <Button href={this.props.recipeWeb} >Recipe</Button>
+                    </Card.Body>
+                </Card>
+            </div>
+        )
+
+        // if(this.state.card === false) {
+        //     display = (
+        //         <Jumbotron>
+        //             <h1>{this.props.title}</h1>
+        //             <p>
+        //                 This is a simple hero unit, a simple jumbotron-style component for calling
+        //                 extra attention to featured content or information.
+        //             </p>
+        //         </Jumbotron>
+
+        //     )
+        // }
+
+
+
+        if(this.state.homeCard === false) {
+            //this should go back to home screen
+            
+            display = (
+                
+                <Jumbotron>
+                    <h1>Home Button</h1>
+                    <p>
+                        This is a simple hero unit, a simple jumbotron-style component for calling
+                        extra attention to featured content or information.
+                    </p>
+                </Jumbotron>
+            )
+        }
+        
+        return (
+            <div>
+                {display}
+            </div>
+        );
+    }
 }
-export default displayCard;
-//<Button variant="primary">Go somewhere</Button>
+
+export default displayScreen;
+
+// variant="top" className = "img-thumbnail"
+//href="#"
+//onClick={() => this.clickHandler()}
