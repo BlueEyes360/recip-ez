@@ -11,9 +11,11 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import authReducer from './store/reducers/authReducer';
+import recipeReducer from './store/reducers/recipeReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    recipe: recipeReducer
 })
 
 const logger = store => {
