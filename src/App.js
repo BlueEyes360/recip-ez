@@ -20,7 +20,8 @@ class App extends Component {
         dataMicro: 0,
         dataGoogle: 0,
         error: 0,
-        count: 0
+        count: 0,
+        loading: true,
     }
 
     doVisionAPICall = () => {
@@ -265,7 +266,7 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAutoSignUp: () => dispatch(actions.authCheckState())
+        onTryAutoSignUp: () => dispatch(actions.authCheckState()),
     };
 };
 
