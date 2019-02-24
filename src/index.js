@@ -12,10 +12,12 @@ import thunk from 'redux-thunk';
 
 import authReducer from './store/reducers/authReducer';
 import recipeReducer from './store/reducers/recipeReducer';
+import pagesReducer from './store/reducers/pagesReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    recipe: recipeReducer
+    recipe: recipeReducer,
+    pages: pagesReducer
 })
 
 const logger = store => {

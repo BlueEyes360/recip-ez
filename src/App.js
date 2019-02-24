@@ -25,6 +25,7 @@ class App extends Component {
         error: 0,
         count: 0,
         loading: true,
+        showIngredientsForm: false,
     }
 
     doVisionAPICall = () => {
@@ -181,9 +182,9 @@ class App extends Component {
             console.log(error);
             this.setState({error: error});
         });
-        
+
     }
-    
+
     doMicrosoftVisionCall = ( imgURL, action ) => {
         
         let MicroVisCallAPICall = axios.create({
@@ -243,6 +244,11 @@ class App extends Component {
         });
     }
 
+    toggleShowIngredients = () => {
+        let truth = this.state.showIngredientsForm;
+        this.setState({showIngredientsForm: !truth});
+    }
+
     componentWillMount() {
 
         // this.doVisionAPICall();
@@ -259,13 +265,21 @@ class App extends Component {
     render() {
 
         return (
-            <div className="App">
+        <div className="App">
             <AppNav />
-            <IngredientForm />
             <UI />
         </div>
         );
 
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        loading: state.auth.loading,
+        error: state.auth.error,
+        token: state.auth.token,
+        showIngredForm: state.pagesRec
     }
 }
 
@@ -275,4 +289,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

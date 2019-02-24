@@ -1,8 +1,11 @@
 export {
     saveRecipe
-} from './saveRecipe';
+} from './saveRecipe'
 export {
     auth,
     logout,
     authCheckState
-} from './auth';
+} from './auth'
+export {
+    showIngred
+} from './showComponents'

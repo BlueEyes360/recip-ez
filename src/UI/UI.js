@@ -6,6 +6,11 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
 
+import IngredientForm from '../containers/IngredientForm/IngredientForm';
+
+import * as actions from '../store/actions/actionTypes';
+
+import { connect } from 'react-redux';
 
 import ingredientImage from './assets/ingredientPic.png';
 import cameraImage from './assets/Camera.png';
@@ -22,7 +27,7 @@ class UI extends Component {
         this.handleClick = this.handleClick.bind(this);
 
         this.state = {
-            isLoading: false, 
+            isLoading: false,
         };
     }
     handleClick() {
@@ -34,11 +39,23 @@ class UI extends Component {
     }
     render() {
         const { isLoading } = this.state;
+
+        let ingredForm = null;
+
+        if(this.props.showIngredientsForm){
+            ingredForm = <IngredientForm  showForm={this.state.showIngredientsForm} />
+        }
+
+
         return(
             <Container className="fluid">
-               <Navbar bg ="dark" varient="dark" className="fixed-bottom">     
+                {ingredForm}
+                <Navbar bg ="dark" varient="dark" className="fixed-bottom">     
                     <Col xs={4} className="d-flex justify-content-center">
-                        <Button variant="light"> 
+                        <Button
+                            onClick={this.props.toggleIngredientsPicker}
+                            truth={this.props.showForm}
+                            variant="light"> 
                             <p className="font-weight-bolder"> </p>                            
                             <Image src={ingredientImage} rounded />
                         </Button>
@@ -62,4 +79,20 @@ class UI extends Component {
         );
     }
 }
-export default UI;
+
+const mapStateToProps = state => {
+    return {
+        error: state.auth.error,
+        token: state.auth.token,
+        showUI: state.pages.showUI
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        toggleIngredientsPicker: () => dispatch(actions.SHOW_INGRED_FORM)
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(UI);
