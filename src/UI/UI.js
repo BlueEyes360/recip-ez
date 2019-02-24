@@ -7,13 +7,15 @@ import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
 import axios from 'axios';
 
-import {FIREBASE_BASE_URL, GOOGLE_API_KEY, MICROSOFT_VISION_API_KEY, MICROSOFT_VISION_BASE_URL} from '../APIKeys';
+import {FIREBASE_BASE_URL, GOOGLE_API_KEY, MICROSOFT_VISION_API_KEY, MICROSOFT_VISION_BASE_URL, MICROSOFT_CUSTOM_URL, MICROSOFT_CUSTOM_API_KEY} from '../APIKeys';
 
 import IngredientForm from '../containers/IngredientForm/IngredientForm';
 
 import ingredientImage from './assets/ingredientPic.png';
 import cameraImage from './assets/Camera.png';
 import recipeImage from './assets/Recipes.png';
+
+const fetch = require('node-fetch');
 
 const GOOGLE = true;
 const MICROSOFT = false;
@@ -27,7 +29,7 @@ class UI extends Component {
         loading: true,
         showForm: false,
     }
-    
+
     doVisionAPICall = () => {
 
         let VisAPIInstance = axios.create({
@@ -185,7 +187,7 @@ class UI extends Component {
 
     }
 
-    doMicrosoftVisionCall = ( imgURL, action ) => {
+    doMicrosoftVisionCall = ( imgURL, action, tags ) => {
 
         let MicroVisCallAPICall = axios.create({
             baseURL: MICROSOFT_VISION_BASE_URL,
@@ -204,10 +206,33 @@ class UI extends Component {
         else if ( action === 'analyze' )
         {
             params = '?visualFeatures=Categories,Description,Tags';
-        apiURL = 'analyze' + params + '&subscription-key=' + MICROSOFT_VISION_API_KEY;
-    }
+            apiURL = 'analyze' + params + '&subscription-key=' + MICROSOFT_VISION_API_KEY;
+        }
 
     MicroVisCallAPICall.post(apiURL,
+        {"url": imgURL})
+        .then(response => {
+            console.log(response);
+            this.setState({dataMicro: response.data});
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState({error: this.error});
+        });
+
+    }
+
+    doMicrosoftCustomCall = ( imgURL, tags ) => {
+
+        let MicroVisCallAPICall = axios.create({
+            baseURL: MICROSOFT_CUSTOM_URL,
+            'Access-Control-Allow-Origin': '*',
+            'Ocp-Apim-Subscription-Key': MICROSOFT_CUSTOM_API_KEY
+        });
+
+        let params = '';
+
+    MicroVisCallAPICall.post("",
         {"url": imgURL})
         .then(response => {
             console.log(response);
@@ -235,6 +260,7 @@ class UI extends Component {
             ingredForm = <IngredientForm />;
         }
 
+        var testIngredients = ['carrot', 'egg'];
 
         return(
             <Container className="fluid">
@@ -247,18 +273,20 @@ class UI extends Component {
                             <p className="font-weight-bolder"> </p>
                             <Image src={ingredientImage} rounded />
                         </Button>
-                    </Col> 
+                    </Col>
                     <Col xs={4} className="d-flex justify-content-center"> 
-                        <Button 
+                        <Button
                             variant="light"
                             disabled={isLoading}
-                            onClick={() => this.doMicrosoftVisionCall("https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg", 'detect')}>
+                            onClick={() => this.doMicrosoftCustomCall("https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg", 'orange')}>
                             <Image src={cameraImage} rounded />
                         </Button>
                     </Col>
                     <Col xs={4} className="d-flex justify-content-center">
-                        <Button variant="light">
-                            <p className="font-weight-bolder"> </p>                            
+                        <Button
+                        variant="light"
+                        onClick={this.toggleShowIngredients}>
+                            <p className="font-weight-bolder"> </p>
                             <Image src={recipeImage} rounded />
                         </Button>
                     </Col>
