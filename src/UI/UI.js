@@ -44,11 +44,7 @@ class UI extends Component {
             "requests":[
                 {
                 "image":{
-                    // "content": {encodedOne}
                     "source":{
-                        // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
-                        // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-                        // "imageUri": "https://storage.googleapis.com/wzukusers/user-32857987/images/5ac5a109356cdt9b4ccL/20170625_103422.jpg"
                         "imageUri": "https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg"
                     }
                 },
@@ -57,26 +53,6 @@ class UI extends Component {
                     "type":"LABEL_DETECTION",
                     "maxResults":10
                 },
-                // {
-                    //     "type":"FACE_DETECTION",
-                    //     "maxResults":10
-                // },
-                // {
-                    //   "type":"LANDMARK_DETECTION",
-                    //   "maxResults":10
-                // },
-                // {
-                //   "type":"LOGO_DETECTION",
-                //   "maxResults":10
-                // },
-                {
-                    "type":"TEXT_DETECTION",
-                    "maxResults":10
-                },
-                {
-                    "type":"WEB_DETECTION",
-                    "maxResults":10
-                },
                 {
                     "type":"OBJECT_LOCALIZATION",
                     "maxResults":10
@@ -89,10 +65,7 @@ class UI extends Component {
             },
             {
                 "image":{
-                    // "content": {encodedTwo}
                     "source":{
-                    // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
-                    // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
                     "imageUri": "https://upload.wikimedia.org/wikipedia/commons/0/09/Food_into_a_refrigerator_-_20111002.jpg"
                 }
             },
@@ -101,68 +74,25 @@ class UI extends Component {
                         "type":"LABEL_DETECTION",
                         "maxResults":10
                     },
-                // {
-                    //     "type":"FACE_DETECTION",
-                //     "maxResults":10
-                // },
-                // {
-                //   "type":"LANDMARK_DETECTION",
-                //   "maxResults":10
-                // },
-                {
-                    "type":"LOGO_DETECTION",
-                    "maxResults":10
-                },
-                {
-                    "type":"TEXT_DETECTION",
-                    "maxResults":10
-                },
-                {
-                    "type":"WEB_DETECTION",
-                    "maxResults":10
-                },
-                {
-                    "type":"OBJECT_LOCALIZATION",
-                    "maxResults":10
-                },
-                {
-                    "type":"IMAGE_PROPERTIES",
-                    "maxResults":10
-                }
-            ]
+                    {
+                        "type":"OBJECT_LOCALIZATION",
+                        "maxResults":10
+                    },
+                    {
+                        "type":"IMAGE_PROPERTIES",
+                        "maxResults":10
+                    }
+                ]
             },
             {
                 "image":{
-                    // "content": {encodedThree}
                     "source":{
-                        // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
-                    // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
                     "imageUri": "https://kitchenaid-h.assetsadobe.com/is/image/content/dam/business-unit/maytag/en-us/marketing-content/site-assets/page-content/refrigerators-sclp/Images/P140303_5z_SCLP_02.png?$clp-image-desktop$"
                 }
             },
                 "features":[
                     {
                     "type":"LABEL_DETECTION",
-                    "maxResults":10
-                },
-                // {
-                    //     "type":"FACE_DETECTION",
-                    //     "maxResults":10
-                // },
-                // {
-                //   "type":"LANDMARK_DETECTION",
-                //   "maxResults":10
-                // },
-                {
-                    "type":"LOGO_DETECTION",
-                    "maxResults":10
-                },
-                {
-                    "type":"TEXT_DETECTION",
-                    "maxResults":10
-                },
-                {
-                    "type":"WEB_DETECTION",
                     "maxResults":10
                 },
                 {
@@ -179,7 +109,6 @@ class UI extends Component {
     })
         .then(response => {
             console.log(response);
-            this.setState({response: response.data.responses});
             this.setState({dataGoogle: response.data.responses});
         })
         .catch(error => {
@@ -189,7 +118,7 @@ class UI extends Component {
 
     }
 
-    doMicrosoftVisionCall = ( imgURL, action, tags ) => {
+    doMicrosoftVisionCall = ( imgURL, action ) => {
 
         let MicroVisCallAPICall = axios.create({
             baseURL: MICROSOFT_VISION_BASE_URL,
@@ -199,7 +128,6 @@ class UI extends Component {
 
         let apiURL = '';
         let params = '';
-        // let params = '?visualFeatures=Categories,Description,Tags';
 
         if( action === 'detect' )
         {
@@ -211,17 +139,16 @@ class UI extends Component {
             apiURL = 'analyze' + params + '&subscription-key=' + MICROSOFT_VISION_API_KEY;
         }
 
-    MicroVisCallAPICall.post(apiURL,
-        {"url": imgURL})
-        .then(response => {
-            console.log(response);
-            this.setState({dataMicro: response.data});
-        })
-        .catch(error => {
-            console.log(error);
-            this.setState({error: this.error});
-        });
-
+        MicroVisCallAPICall.post(apiURL,
+            {"url": imgURL})
+            .then(response => {
+                console.log(response);
+                this.setState({dataMicro: response.data.objects});
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({error: this.error});
+            });
     }
 
     doMicrosoftCustomCall = ( imgURL, tags ) => {
@@ -245,6 +172,11 @@ class UI extends Component {
             this.setState({error: this.error});
         });
 
+    }
+
+    doubleVisionCall = (imgURL, action) => {
+        this.doMicrosoftVisionCall(imgURL, action);
+        this.doVisionAPICall();
     }
 
 
@@ -292,6 +224,7 @@ class UI extends Component {
                 </div>
             )
         }
+
         var testIngredients = ['carrot', 'egg'];
 
         return(
@@ -311,7 +244,7 @@ class UI extends Component {
                         <Button
                             variant="light"
                             disabled={isLoading}
-                            onClick={() => this.doMicrosoftCustomCall("https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg", 'orange')}>
+                            onClick={() => this.doubleVisionCall("https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg", 'detect')}>
                             <Image src={cameraImage} rounded />
                         </Button>
                     </Col>

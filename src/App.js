@@ -13,8 +13,6 @@ import UI from './UI/UI';
 class App extends Component {
 
     state = {
-        dataMicro: 0,
-        dataGoogle: 0,
         error: 0,
         count: 0,
         loading: true,
