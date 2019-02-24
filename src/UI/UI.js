@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
 import axios from 'axios';
@@ -28,6 +29,7 @@ class UI extends Component {
         count: 0,
         loading: true,
         showForm: false,
+        showRecipes: false
     }
 
     doVisionAPICall = () => {
@@ -251,6 +253,11 @@ class UI extends Component {
         this.setState({showForm: truth});
     }
 
+    toggleShowRecipe = () => {
+        let truth = !this.state.showRecipes;
+        this.setState({showRecipes: truth});
+    }
+
     render() {
         const { isLoading } = this.state;
 
@@ -260,11 +267,37 @@ class UI extends Component {
             ingredForm = <IngredientForm />;
         }
 
+        let display = null;
+
+        if(this.state.showForm === true){
+            ingredForm = <IngredientForm />;
+        }
+
+        if(this.state.showRecipes === true){
+            display = (
+                <div>
+                    <Card className="recipeCard">
+                    <Card.Img src={this.props.picture} Transformation width="250" height="250" gravity="faces" crop="fill" />
+                        <Card.Body>
+                            <Card.Title>{this.props.title}</Card.Title>
+                            <Card.Text>
+                                Food2Fork Popularity Rank: 
+                                <p>{this.props.socialRank}</p>
+                            </Card.Text>
+                            <Button onClick={() => this.clickHome()}>Home</Button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            <Button href={this.props.recipeWeb} >Recipe</Button>
+                        </Card.Body>
+                    </Card>
+                </div>
+            )
+        }
         var testIngredients = ['carrot', 'egg'];
 
         return(
             <Container className="fluid">
                 {ingredForm}
+                {display}
                 <Navbar bg ="dark" varient="dark" className="fixed-bottom">
                     <Col xs={4} className="d-flex justify-content-center">
                         <Button
@@ -285,7 +318,7 @@ class UI extends Component {
                     <Col xs={4} className="d-flex justify-content-center">
                         <Button
                         variant="light"
-                        onClick={this.toggleShowIngredients}>
+                        onClick={() => this.toggleShowRecipe()}>
                             <p className="font-weight-bolder"> </p>
                             <Image src={recipeImage} rounded />
                         </Button>
