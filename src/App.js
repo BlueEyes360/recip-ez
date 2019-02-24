@@ -6,7 +6,9 @@ import UI from './UI/UI';
 class App extends Component {
     render() {
         return (
-            <UI />
+            <div className="App">
+                <UI />
+            </div>
         );
     }
 }
