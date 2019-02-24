@@ -11,6 +11,8 @@ import AppNav from './components/AppNav';
 import UI from './UI/UI';
 
 class App extends Component {
+  render() {
+  }
 
     state = {
         dataMicro: 0,
