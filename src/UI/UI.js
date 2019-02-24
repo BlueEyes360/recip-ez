@@ -6,9 +6,11 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
+import Alert from 'react-bootstrap/Alert';
+
 import axios from 'axios';
 
-import {FIREBASE_BASE_URL, GOOGLE_API_KEY, MICROSOFT_VISION_API_KEY, MICROSOFT_VISION_BASE_URL, MICROSOFT_CUSTOM_URL, MICROSOFT_CUSTOM_API_KEY} from '../APIKeys';
+import {FIREBASE_BASE_URL, GOOGLE_API_KEY, MICROSOFT_VISION_API_KEY, MICROSOFT_VISION_BASE_URL, MICROSOFT_CUSTOM_URL, MICROSOFT_CUSTOM_API_KEY, FOOD_TO_FORK_URL} from '../APIKeys';
 
 import IngredientForm from '../containers/IngredientForm/IngredientForm';
 
@@ -28,7 +30,8 @@ class UI extends Component {
         count: 0,
         showForm: false,
         showRecipes: false,
-        ingredientList: []
+        ingredientList: [],
+        recipeResponses: 0
     }
 
     doVisionAPICall = () => {
@@ -192,7 +195,40 @@ class UI extends Component {
         this.setState({ingredientList: dataFromChild});
     }
 
+    doFoodApiCall = (testArray) => {
+
+        let FoodAPIInstance = axios.create({
+            baseURL: FOOD_TO_FORK_URL,
+        'Access-Control-Allow-Origin': '*'
+        });
+
+        let q = '';
+        if(testArray)
+        {
+            testArray.forEach(function(element) {
+                q += element + ',';
+            });
+        }
+
+    FoodAPIInstance.get(q)
+        .then(response => {
+            console.log(response);
+            this.setState({recipeResponses: response.data.recipes});
+            this.setState({count: response.data.count});
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState({error: error})
+        });
+    }
+
+    doGetRecipes = (testArray) => {
+        this.doFoodApiCall(testArray);
+        setTimeout(this.toggleShowRecipe, 2000);
+    }
+
     render() {
+
         const { isLoading } = this.state;
 
         let ingredForm = null;
@@ -204,23 +240,29 @@ class UI extends Component {
         let display = null;
 
         if(this.state.showRecipes === true){
-            display = (
-                <div>
-                    <Card className="recipeCard">
-                    <Card.Img src={this.props.picture} Transformation width="250" height="250" gravity="faces" crop="fill" />
-                        <Card.Body>
-                            <Card.Title>{this.props.title}</Card.Title>
+            let recipes = this.state.recipeResponses;
+            if(recipes)
+            {
+                display = recipes.map(x => (
+                        <Card className="recipeCard">
+                            <Card.Img src={x.image_url} Transformation width="250" height="250" gravity="faces" crop="fill" />
+                            <Card.Body>
+                            <Card.Title>{x.title}</Card.Title>
                             <Card.Text>
-                                Food2Fork Popularity Rank: 
-                                <p>{this.props.socialRank}</p>
+                                Food2Fork Popularity Rank:
+                                <p>{x.social_rank}</p>
                             </Card.Text>
-                            <Button onClick={() => this.clickHome()}>Home</Button>
+                            <Button onClick={() => this.toggleShowRecipe()}>Home</Button>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                            <Button href={this.props.recipeWeb} >Recipe</Button>
-                        </Card.Body>
-                    </Card>
-                </div>
-            )
+                            <Button href={x.source_url} >Recipe</Button>
+                            </Card.Body>
+                        </Card>
+                    )
+                )
+            }
+            else {
+                display = <Alert variant="danger">No recipes were found for your ingredients! We also used up all 50 of our API calls!</Alert>
+            }
         }
 
         return(
@@ -236,7 +278,7 @@ class UI extends Component {
                             <Image src={ingredientImage} rounded />
                         </Button>
                     </Col>
-                    <Col xs={4} className="d-flex justify-content-center"> 
+                    <Col xs={4} className="d-flex justify-content-center">
                         <Button
                             variant="light"
                             disabled={isLoading}
@@ -247,7 +289,7 @@ class UI extends Component {
                     <Col xs={4} className="d-flex justify-content-center">
                         <Button
                         variant="light"
-                        onClick={() => this.toggleShowRecipe()}>
+                        onClick={() => this.doGetRecipes(this.state.ingredientList)}>
                             <p className="font-weight-bolder"> </p>
                             <Image src={recipeImage} rounded />
                         </Button>
@@ -257,6 +299,5 @@ class UI extends Component {
         );
     }
 }
-
 
 export default UI;
