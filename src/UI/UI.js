@@ -155,16 +155,19 @@ class UI extends Component {
 
     doMicrosoftCustomCall = ( imgURL, tags ) => {
 
-        let MicroVisCallAPICall = axios.create({
-            baseURL: MICROSOFT_CUSTOM_URL,
-            'Access-Control-Allow-Origin': '*',
-            'Ocp-Apim-Subscription-Key': MICROSOFT_CUSTOM_API_KEY
+        let MicroCusCallAPICall = axios.create({
+            baseURL: "",
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Ocp-Apim-Subscription-Key': MICROSOFT_CUSTOM_API_KEY,
+            // "Training-key":"271b4a85-8fb6-47ef-8cd6-8a3f79240f21",
+            "Prediction-Key": "271fc8ad68f843a7b217bc744eb9e5f4",
+            "Content-Type": "application/json"
         });
 
         let params = '';
 
-    MicroVisCallAPICall.post("",
-        {"url": imgURL})
+    MicroCusCallAPICall.get("https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/8fd070d8-653a-4ed5-ad6d-b75463575fa6",
+        {"Url": "https://example.com/image.png"})
         .then(response => {
             console.log(response);
             this.setState({dataMicro: response.data});
