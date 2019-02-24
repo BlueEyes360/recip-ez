@@ -25,7 +25,6 @@ class App extends Component {
         error: 0,
         count: 0,
         loading: true,
-        showIngredientsForm: false,
     }
 
     doVisionAPICall = () => {
@@ -244,11 +243,6 @@ class App extends Component {
         });
     }
 
-    toggleShowIngredients = () => {
-        let truth = this.state.showIngredientsForm;
-        this.setState({showIngredientsForm: !truth});
-    }
-
     componentWillMount() {
 
         // this.doVisionAPICall();
@@ -279,7 +273,6 @@ const mapStateToProps = state => {
         loading: state.auth.loading,
         error: state.auth.error,
         token: state.auth.token,
-        showIngredForm: state.pagesRec
     }
 }
 
