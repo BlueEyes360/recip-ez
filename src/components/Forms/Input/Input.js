@@ -4,7 +4,7 @@ const input = (props) => {
 
     let inputElement = null;
 
-    let inputClasses = "form-control";
+    let inputClasses = "form-control mb-4";
 
     switch ( props.elementType ) {
         case ( 'input' ):

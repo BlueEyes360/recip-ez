@@ -1,21 +1,4 @@
-<<<<<<< HEAD
-import React, { Component } from 'react';
-import './App.css';
 
-import UI from './UI/UI';
-
-class App extends Component {
-    render() {
-        return (
-            <div className="App">
-                <UI />
-            </div>
-        );
-    }
-}
-
-export default App;
-=======
 import React, { Component } from 'react';
 import axios from 'axios';
 // import ProcessImages from './containers/ProcessImages/ProcessImages';
@@ -26,6 +9,8 @@ import * as actions from './store/actions/index';
 import {FIREBASE_BASE_URL, GOOGLE_API_KEY, MICROSOFT_VISION_API_KEY, MICROSOFT_VISION_BASE_URL} from './APIKeys';
 
 import AppNav from './components/AppNav';
+import UI from './UI/UI';
+import IngredientForm from './containers/IngredientForm/IngredientForm';
 
 
 // import VisionAPI from './components/VisionAPI/VisionAPI';
@@ -45,22 +30,22 @@ class App extends Component {
     doVisionAPICall = () => {
 
         let VisAPIInstance = axios.create({
-        baseURL: 'https://vision.googleapis.com/v1/images:annotate?key=' + GOOGLE_API_KEY,
+            baseURL: 'https://vision.googleapis.com/v1/images:annotate?key=' + GOOGLE_API_KEY,
         'Access-Control-Allow-Origin': '*'
-        });
+    });
 
         VisAPIInstance.post('',
         {
-        "requests":[
-            {
+            "requests":[
+                {
                 "image":{
                     // "content": {encodedOne}
                     "source":{
-                    // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
-                    // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
-                    // "imageUri": "https://storage.googleapis.com/wzukusers/user-32857987/images/5ac5a109356cdt9b4ccL/20170625_103422.jpg"
-                    "imageUri": "https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg"
-                }
+                        // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
+                        // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+                        // "imageUri": "https://storage.googleapis.com/wzukusers/user-32857987/images/5ac5a109356cdt9b4ccL/20170625_103422.jpg"
+                        "imageUri": "https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg"
+                    }
                 },
                 "features":[
                 {
@@ -68,12 +53,12 @@ class App extends Component {
                     "maxResults":10
                 },
                 // {
-                //     "type":"FACE_DETECTION",
-                //     "maxResults":10
+                    //     "type":"FACE_DETECTION",
+                    //     "maxResults":10
                 // },
                 // {
-                //   "type":"LANDMARK_DETECTION",
-                //   "maxResults":10
+                    //   "type":"LANDMARK_DETECTION",
+                    //   "maxResults":10
                 // },
                 // {
                 //   "type":"LOGO_DETECTION",
@@ -95,7 +80,7 @@ class App extends Component {
                     "type":"IMAGE_PROPERTIES",
                     "maxResults":10
                 }
-                ]
+            ]
             },
             {
                 "image":{
@@ -105,14 +90,14 @@ class App extends Component {
                     // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
                     "imageUri": "https://upload.wikimedia.org/wikipedia/commons/0/09/Food_into_a_refrigerator_-_20111002.jpg"
                 }
-                },
+            },
                 "features":[
-                {
-                    "type":"LABEL_DETECTION",
-                    "maxResults":10
-                },
+                    {
+                        "type":"LABEL_DETECTION",
+                        "maxResults":10
+                    },
                 // {
-                //     "type":"FACE_DETECTION",
+                    //     "type":"FACE_DETECTION",
                 //     "maxResults":10
                 // },
                 // {
@@ -139,25 +124,25 @@ class App extends Component {
                     "type":"IMAGE_PROPERTIES",
                     "maxResults":10
                 }
-                ]
+            ]
             },
             {
                 "image":{
                     // "content": {encodedThree}
                     "source":{
-                    // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
+                        // "imageUri":"https://cnet4.cbsistatic.com/img/vwQOO7UpqbcbW_oOWiPfzzWc0Og=/970x0/2018/04/11/76a26a67-5570-4f3a-bacb-cba839c7df20/gettyimages-944480672.jpg"
                     // "imageUri": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
                     "imageUri": "https://kitchenaid-h.assetsadobe.com/is/image/content/dam/business-unit/maytag/en-us/marketing-content/site-assets/page-content/refrigerators-sclp/Images/P140303_5z_SCLP_02.png?$clp-image-desktop$"
                 }
-                },
+            },
                 "features":[
-                {
+                    {
                     "type":"LABEL_DETECTION",
                     "maxResults":10
                 },
                 // {
-                //     "type":"FACE_DETECTION",
-                //     "maxResults":10
+                    //     "type":"FACE_DETECTION",
+                    //     "maxResults":10
                 // },
                 // {
                 //   "type":"LANDMARK_DETECTION",
@@ -185,46 +170,46 @@ class App extends Component {
                 }
                 ]
             }
-            ]
-        })
+        ]
+    })
         .then(response => {
             console.log(response);
             this.setState({response: response.data.responses});
             this.setState({dataGoogle: response.data.responses});
-            })
+        })
         .catch(error => {
             console.log(error);
             this.setState({error: error});
         });
-
+        
     }
-
+    
     doMicrosoftVisionCall = ( imgURL, action ) => {
-
+        
         let MicroVisCallAPICall = axios.create({
             baseURL: MICROSOFT_VISION_BASE_URL,
             'Access-Control-Allow-Origin': '*',
             'ocp-apim-subscription-key': MICROSOFT_VISION_API_KEY
         });
-
+        
         let apiURL = '';
         let params = '';
         // let params = '?visualFeatures=Categories,Description,Tags';
-
+        
         if( action === 'detect' )
         {
             apiURL = 'detect?&subscription-key=' + MICROSOFT_VISION_API_KEY
         }
         else if ( action === 'analyze' )
         {
-        params = '?visualFeatures=Categories,Description,Tags';
+            params = '?visualFeatures=Categories,Description,Tags';
         apiURL = 'analyze' + params + '&subscription-key=' + MICROSOFT_VISION_API_KEY;
-        }
+    }
 
-        MicroVisCallAPICall.post(apiURL,
+    MicroVisCallAPICall.post(apiURL,
         // MicroVisCallAPICall.post('detect?&subscription-key=' + MICROSOFT_VISION_API_KEY,
         // MicroVisCallAPICall.post('analyze' + params + '&subscription-key=' + MICROSOFT_VISION_API_KEY,
-            {"url": imgURL})
+        {"url": imgURL})
         .then(response => {
             console.log(response);
             this.setState({dataMicro: response.data});
@@ -240,7 +225,7 @@ class App extends Component {
         let SavedDataInstance = axios.create({
             baseURL: FIREBASE_BASE_URL,
             'Access-Control-Allow-Origin': '*'
-            });
+        });
 
         SavedDataInstance.get(path + "/1.json")
         .then(response => {
@@ -263,19 +248,21 @@ class App extends Component {
         // this.doVisionAPICall();
         // this.doMicrosoftVisionCall("https://thewirecutter.com/wp-content/uploads/2018/05/refrigerators-2018-2x1-lowres.jpg", 'detect');
 
-        this.callSavedData("vision_tests", GOOGLE);
-        this.callSavedData("micro_vision_tests", MICROSOFT);
+        // this.callSavedData("vision_tests", GOOGLE);
+        // this.callSavedData("micro_vision_tests", MICROSOFT);
     }
 
     componentDidMount() {
-        this.props.onTryAutoSignUp();
+        this.props.onTryAutoSignIn();
     }
 
     render() {
 
         return (
-        <div className="App">
+            <div className="App">
             <AppNav />
+            <IngredientForm />
+            <UI />
         </div>
         );
 
@@ -284,9 +271,8 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAutoSignUp: () => dispatch(actions.authCheckState()),
+        onTryAutoSignIn: () => dispatch(actions.authCheckState()),
     };
 };
 
 export default connect(null, mapDispatchToProps)(App);
->>>>>>> master
